@@ -73,12 +73,11 @@ function getMostPopularAuthors(books, authors) {
 
   for(let id in authorIDs){
     const authorId = authorIDs[id];
-    //const author = authors.find((author) => author.id === authorId);
 
     let authorBorrows = 0;
     for(let book in books){
       const bookAuthorId = books[book].authorId;
-      if(bookAuthorId === authorId)
+      if(bookAuthorId === authorId) //use filter for author id instead
         authorBorrows += books[book].borrows.length;
     }
 

@@ -13,28 +13,27 @@ function getTotalNumberOfBorrows(account, books) {
 
   for(let book in books){
     const borrows = books[book].borrows;
-    for(let borrow in borrows){
-      const borrower = borrows[borrow].id;
-      if(id === borrower)
-      totalBorrows++;
-    }
+    
+    totalBorrows += borrows.reduce((accumulator, currVal) => {
+      const borrower = currVal.id;
+      if(id === borrower){
+        accumulator++;
+      }
+
+      return accumulator;
+    }, 0);
   }
   return totalBorrows;
 }
 
 function getBooksPossessedByAccount(account, books, authors) {
-  let borrowedBooks = [];
+  return books.filter((book) => {
+    const borrowerList = book.borrows;
+    book["author"] = authors.find((author) => author.id === book.authorId);
 
-  for(let bookname in books){
-    const book = books[bookname];
+    return borrowerList.find((borrower) => borrower.id === account.id && !borrower.returned);
+  });
 
-    if(book.borrows.find((borrower) => borrower.id === account.id && !borrower.returned)){
-      book["author"] = authors.find(author => author.id === book.authorId);
-      borrowedBooks.push(book);
-    }
-  }
-
-  return borrowedBooks;
 }
 
 module.exports = {
